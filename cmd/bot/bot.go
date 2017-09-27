@@ -191,7 +191,7 @@ var WOW *SoundCollection = &SoundCollection{
 	},
 }
 
-var AOE2_1 *SoundCollection = &SoundCollection{
+var AOE1 *SoundCollection = &SoundCollection{
 	Prefix: "aoe2",
 	Commands: []string{
 		"1",
@@ -209,7 +209,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	COW,
 	BIRTHDAY,
 	WOW,
-	AOE2-1,
+	AOE1,
 }
 
 // Create a Sound struct
@@ -580,7 +580,7 @@ func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, 
 }
 
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if len(m.Content) <= 0 || len(m.Mentions) {
+	if len(m.Content) <= 0 || len(m.Mentions) < 1 {
 		return
 	}
 
