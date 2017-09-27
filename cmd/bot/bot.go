@@ -191,7 +191,7 @@ var WOW *SoundCollection = &SoundCollection{
 	},
 }
 
-var AOE2-1 *SoundCollection = &SoundCollection{
+var AOE2_1 *SoundCollection = &SoundCollection{
 	Prefix: "aoe2",
 	Commands: []string{
 		"1",
