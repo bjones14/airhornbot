@@ -191,6 +191,27 @@ var WOW *SoundCollection = &SoundCollection{
 	},
 }
 
+var JASONBOURNE *SoundCollection = &SoundCollection{
+	Prefix: "jasonbourne",
+	Commands: []string{
+		"!jasonbourne",
+		"!jb",
+	},
+	Sounds: []*Sound{
+		createSound("original", 50, 250),
+	},
+}
+
+var MILK *SoundCollection = &SoundCollection{
+	Prefix: "milk",
+	Commands: []string{
+		"!milk",
+	},
+	Sounds: []*Sound{
+		createSound("original", 50, 250),
+	},
+}
+
 var AOE1 *SoundCollection = &SoundCollection{
 	Prefix: "aoe2",
 	Commands: []string{
@@ -619,6 +640,8 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	COW,
 	BIRTHDAY,
 	WOW,
+	JASONBOURNE,
+	MILK,
 	AOE1,
 	AOE2,
 	AOE3,
