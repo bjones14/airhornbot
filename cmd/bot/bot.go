@@ -194,7 +194,7 @@ var WOW *SoundCollection = &SoundCollection{
 var AOE1 *SoundCollection = &SoundCollection{
 	Prefix: "aoe2",
 	Commands: []string{
-		"1",
+		"!1",
 	},
 	Sounds: []*Sound{
 		createSound("1-yes", 50, 250),
@@ -580,7 +580,7 @@ func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, 
 }
 
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if len(m.Content) <= 0 || len(m.Mentions) < 1 {
+	if len(m.Content) <= 0 || (m.Content[0] != '!' && len(m.Mentions) < 1) {
 		return
 	}
 
