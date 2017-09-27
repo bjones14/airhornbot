@@ -654,13 +654,13 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE33,
 	AOE34,
 	AOE35,
-	AOE36
+	AOE36,
 	AOE37,
 	AOE38,
 	AOE39,
 	AOE40,
 	AOE41,
-	AOE42
+	AOE42,
 }
 
 // Create a Sound struct
