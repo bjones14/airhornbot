@@ -201,6 +201,46 @@ var AOE1 *SoundCollection = &SoundCollection{
 	},
 }
 
+var AOE2 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!2",
+	},
+	Sounds: []*Sound{
+		createSound("2-no", 50, 250),
+	},
+}
+
+var AOE3 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!3",
+	},
+	Sounds: []*Sound{
+		createSound("3-food_please", 50, 250),
+	},
+}
+
+var AOE4 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!4",
+	},
+	Sounds: []*Sound{
+		createSound("4-wood_please", 50, 250),
+	},
+}
+
+var AOE30 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!30",
+	},
+	Sounds: []*Sound{
+		createSound("30-wololo", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -210,6 +250,10 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	BIRTHDAY,
 	WOW,
 	AOE1,
+	AOE2,
+	AOE3,
+	AOE4,
+	AOE30,
 }
 
 // Create a Sound struct
