@@ -191,6 +191,16 @@ var WOW *SoundCollection = &SoundCollection{
 	},
 }
 
+var AOE2-1 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"1",
+	},
+	Sounds: []*Sound{
+		createSound("1-yes", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -199,6 +209,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	COW,
 	BIRTHDAY,
 	WOW,
+	AOE2-1,
 }
 
 // Create a Sound struct
