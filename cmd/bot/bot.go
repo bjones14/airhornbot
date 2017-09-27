@@ -191,16 +191,6 @@ var WOW *SoundCollection = &SoundCollection{
 	},
 }
 
-var AOE2_1 *SoundCollection = &SoundCollection{
-	Prefix: "aoe2",
-	Commands: []string{
-		"1",
-	},
-	Sounds: []*Sound{
-		createSound("1-yes", 50, 250),
-	},
-}
-
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -209,7 +199,6 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	COW,
 	BIRTHDAY,
 	WOW,
-	AOE2_1,
 }
 
 // Create a Sound struct
@@ -580,7 +569,7 @@ func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, 
 }
 
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if len(m.Content) <= 0 || (m.Content[0] != '!' && len(m.Mentions) < 1) {
+	if len(m.Content) <= 0 || len(m.Mentions) {
 		return
 	}
 
