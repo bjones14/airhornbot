@@ -231,6 +231,256 @@ var AOE4 *SoundCollection = &SoundCollection{
 	},
 }
 
+var AOE5 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!5",
+	},
+	Sounds: []*Sound{
+		createSound("5-gold_please", 50, 250),
+	},
+}
+
+var AOE6 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!6",
+	},
+	Sounds: []*Sound{
+		createSound("6-stone_please", 50, 250),
+	},
+}
+
+var AOE7 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!7",
+	},
+	Sounds: []*Sound{
+		createSound("7-ahh", 50, 250),
+	},
+}
+
+var AOE8 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!8",
+	},
+	Sounds: []*Sound{
+		createSound("8-all_hail", 50, 250),
+	},
+}
+
+var AOE9 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!9",
+	},
+	Sounds: []*Sound{
+		createSound("9-oooh", 50, 250),
+	},
+}
+
+var AOE10 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!10",
+	},
+	Sounds: []*Sound{
+		createSound("10-back_to_aoe_1", 50, 250),
+	},
+}
+
+var AOE11 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!11",
+	},
+	Sounds: []*Sound{
+		createSound("11-herb_laugh", 50, 250),
+	},
+}
+
+var AOE12 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!12",
+	},
+	Sounds: []*Sound{
+		createSound("12-being_rushed", 50, 250),
+	},
+}
+
+var AOE13 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!13",
+	},
+	Sounds: []*Sound{
+		createSound("13-blame_your_isp", 50, 250),
+	},
+}
+
+var AOE14 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!14",
+	},
+	Sounds: []*Sound{
+		createSound("14-start_the_game_already", 50, 250),
+	},
+}
+
+var AOE15 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!15",
+	},
+	Sounds: []*Sound{
+		createSound("15-dont_point_that_thing_at_me", 50, 250),
+	},
+}
+
+var AOE16 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!16",
+	},
+	Sounds: []*Sound{
+		createSound("16-enemy_sighted", 50, 250),
+	},
+}
+
+var AOE17 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!17",
+	},
+	Sounds: []*Sound{
+		createSound("17-it_is_good_to_be_king", 50, 250),
+	},
+}
+
+var AOE18 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!18",
+	},
+	Sounds: []*Sound{
+		createSound("18-i_need_a_monk", 50, 250),
+	},
+}
+
+var AOE19 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!19",
+	},
+	Sounds: []*Sound{
+		createSound("19-long_time_no_siege", 50, 250),
+	},
+}
+
+var AOE20 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!20",
+	},
+	Sounds: []*Sound{
+		createSound("20-my_granny", 50, 250),
+	},
+}
+
+var AOE21 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!21",
+	},
+	Sounds: []*Sound{
+		createSound("21-nice_town", 50, 250),
+	},
+}
+
+var AOE22 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!22",
+	},
+	Sounds: []*Sound{
+		createSound("22-quit_touchin_me", 50, 250),
+	},
+}
+
+var AOE23 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!23",
+	},
+	Sounds: []*Sound{
+		createSound("23-raiding_party", 50, 250),
+	},
+}
+
+var AOE24 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!24",
+	},
+	Sounds: []*Sound{
+		createSound("24-dad_gum", 50, 250),
+	},
+}
+
+var AOE25 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!25",
+	},
+	Sounds: []*Sound{
+		createSound("25-smite_me", 50, 250),
+	},
+}
+
+var AOE26 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!26",
+	},
+	Sounds: []*Sound{
+		createSound("26-the_wonder", 50, 250),
+	},
+}
+
+var AOE27 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!27",
+	},
+	Sounds: []*Sound{
+		createSound("27-you_play_2_hours", 50, 250),
+	},
+}
+
+var AOE28 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!28",
+	},
+	Sounds: []*Sound{
+		createSound("28-you_should_see_the_other_guy", 50, 250),
+	},
+}
+
+var AOE29 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!29",
+	},
+	Sounds: []*Sound{
+		createSound("29-roggan", 50, 250),
+	},
+}
+
 var AOE30 *SoundCollection = &SoundCollection{
 	Prefix: "aoe2",
 	Commands: []string{
@@ -238,6 +488,126 @@ var AOE30 *SoundCollection = &SoundCollection{
 	},
 	Sounds: []*Sound{
 		createSound("30-wololo", 50, 250),
+	},
+}
+
+var AOE31 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!31",
+	},
+	Sounds: []*Sound{
+		createSound("31-attack_enemy_now", 50, 250),
+	},
+}
+
+var AOE32 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!32",
+	},
+	Sounds: []*Sound{
+		createSound("32-extra_villagers", 50, 250),
+	},
+}
+
+var AOE33 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!33",
+	},
+	Sounds: []*Sound{
+		createSound("33-more_villagers", 50, 250),
+	},
+}
+
+var AOE34 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!34",
+	},
+	Sounds: []*Sound{
+		createSound("34-build_navy", 50, 250),
+	},
+}
+
+var AOE35 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!35",
+	},
+	Sounds: []*Sound{
+		createSound("35-stop_build_navy", 50, 250),
+	},
+}
+
+var AOE36 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!36",
+	},
+	Sounds: []*Sound{
+		createSound("36-wait_for_signal", 50, 250),
+	},
+}
+
+var AOE37 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!37",
+	},
+	Sounds: []*Sound{
+		createSound("37-build_a_wonder", 50, 250),
+	},
+}
+
+var AOE38 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!38",
+	},
+	Sounds: []*Sound{
+		createSound("38-gimme_extra_resources", 50, 250),
+	},
+}
+
+var AOE39 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!39",
+	},
+	Sounds: []*Sound{
+		createSound("39-ally", 50, 250),
+	},
+}
+
+var AOE40 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!40",
+	},
+	Sounds: []*Sound{
+		createSound("40-enemy", 50, 250),
+	},
+}
+
+var AOE41 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!41",
+	},
+	Sounds: []*Sound{
+		createSound("41-neutral", 50, 250),
+	},
+}
+
+var AOE42 *SoundCollection = &SoundCollection{
+	Prefix: "aoe2",
+	Commands: []string{
+		"!42",
+	},
+	Sounds: []*Sound{
+		createSound("42-what_age", 50, 250),
 	},
 }
 
@@ -253,7 +623,44 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE2,
 	AOE3,
 	AOE4,
+	AOE5,
+	AOE6,
+	AOE7,
+	AOE8,
+	AOE9,
+	AOE10,
+	AOE11,
+	AOE12,
+	AOE13,
+	AOE14,
+	AOE15,
+	AOE16,
+	AOE17,
+	AOE18,
+	AOE19,
+	AOE20,
+	AOE21,
+	AOE22,
+	AOE23,
+	AOE24,
+	AOE25,
+	AOE26,
+	AOE27,
+	AOE28,
+	AOE29,
 	AOE30,
+	AOE31,
+	AOE32,
+	AOE33,
+	AOE34,
+	AOE35,
+	AOE36
+	AOE37,
+	AOE38,
+	AOE39,
+	AOE40,
+	AOE41,
+	AOE42
 }
 
 // Create a Sound struct
