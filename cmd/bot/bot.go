@@ -42,7 +42,7 @@ var (
 	lastRan = time.Now()
 	
 	// Time to wait between subsequent joins in seconds.
-	WAIT = 3
+	WAIT = 5
 	
 )
 
