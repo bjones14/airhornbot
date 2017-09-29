@@ -902,7 +902,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	log.Info(difference)
 	
 	if difference < WAIT {
-		time.Sleep(WAIT - difference)
+		time.Sleep(time.Duration(WAIT - difference) * time.Second)
 	}
 	
 	log.WithFields(log.Fields{
