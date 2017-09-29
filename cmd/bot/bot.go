@@ -922,9 +922,9 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	// Play the sound
 	play.Sound.Play(vc)
 	
-	log.info("Finished playing song...")
+	log.inf("Finished playing song...")
 	
-	log.info(len(queue[play.GuildID]))
+	log.inf(len(queue[play.GuildID]))
 
 	// If this is chained, play the chained sound
 	if play.Next != nil {
