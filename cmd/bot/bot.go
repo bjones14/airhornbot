@@ -42,7 +42,7 @@ var (
 	lastRan = time.Now()
 	
 	// Time to wait between subsequent joins in seconds.
-	WAIT = 5
+	WAIT = 3
 	
 )
 
@@ -898,12 +898,11 @@ func trackSoundStats(play *Play) {
 // Play a sound
 func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 
-	difference := time.Now().Sub(lastRan)
+	difference := int(time.Now().Sub(lastRan)/time.Second)
 	log.Info(difference)
 	
-	for int(difference/time.Second) < WAIT {
-		time.Sleep(time.Second * 1)
-		difference := time.Now().Sub(lastRan)
+	if difference < WAIT {
+		time.Sleep(WAIT - difference)
 	}
 	
 	log.WithFields(log.Fields{
