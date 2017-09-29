@@ -918,13 +918,13 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(time.Millisecond * 32)
 
-	log.inf("About to play song...")
+	log.Info("About to play song...")
 	// Play the sound
 	play.Sound.Play(vc)
 	
-	log.inf("Finished playing song...")
+	log.Info("Finished playing song...")
 	
-	log.inf(len(queue[play.GuildID]))
+	log.Info(len(queue[play.GuildID]))
 
 	// If this is chained, play the chained sound
 	if play.Next != nil {
