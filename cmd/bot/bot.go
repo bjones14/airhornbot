@@ -893,7 +893,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	log.WithFields(log.Fields{
 		"play": play,
 	}).Info("Playing sound")
-
+	
 	if vc == nil {
 		vc, err = discord.ChannelVoiceJoin(play.GuildID, play.ChannelID, false, false)
 		// vc.Receive = false
@@ -913,13 +913,18 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	}
 
 	// Track stats for this play in redis
-	go trackSoundStats(play)
+	// go trackSoundStats(play)
 
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(time.Millisecond * 32)
 
+	log.inf("About to play song...")
 	// Play the sound
 	play.Sound.Play(vc)
+	
+	log.info("Finished playing song...")
+	
+	log.info(len(queue[play.GuildID]))
 
 	// If this is chained, play the chained sound
 	if play.Next != nil {
@@ -941,8 +946,8 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 }
 
 func onReady(s *discordgo.Session, event *discordgo.Ready) {
-	log.Info("Recieved READY payload")
-	s.UpdateStatus(0, "airhornbot.com")
+	log.Info("Received READY payload")
+	s.UpdateStatus(0, "AoEII")
 }
 
 func scontains(key string, options ...string) bool {
@@ -1185,7 +1190,7 @@ func main() {
 	}
 
 	// We're running!
-	log.Info("AIRHORNBOT is ready to horn it up.")
+	log.Info("CLANSPBOT is ready to horn it up.")
 
 	// Wait for a signal to quit
 	c := make(chan os.Signal, 1)
