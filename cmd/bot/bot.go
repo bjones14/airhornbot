@@ -901,7 +901,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	difference := time.Now().Sub(lastRan)
 	log.Info(difference)
 	
-	for int64(difference/time.Second) < WAIT {
+	for int(difference/time.Second) < WAIT {
 		time.Sleep(time.Second * 1)
 		difference := time.Now().Sub(lastRan)
 	}
