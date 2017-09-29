@@ -37,6 +37,13 @@ var (
 
 	// Owner
 	OWNER string
+	
+	// Used to delay subsequent voice chat joins.
+	lastRan = time.Now()
+	
+	// Time to wait between subsequent joins in seconds.
+	WAIT = 5
+	
 )
 
 // Play represents an individual use of the !airhorn command
@@ -890,6 +897,19 @@ func trackSoundStats(play *Play) {
 
 // Play a sound
 func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
+
+	difference = time.Now().Sub(lastRan)
+	log.Info(difference)
+	
+	for difference < wait {
+		time.Sleep(time.Second * 1)
+		difference = time.Now().Sub(lastRan)
+	}
+	
+	if difference < WAIT {
+	
+	}
+	
 	log.WithFields(log.Fields{
 		"play": play,
 	}).Info("Playing sound")
@@ -918,11 +938,8 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(time.Millisecond * 32)
 
-	log.Info("About to play song...")
 	// Play the sound
 	play.Sound.Play(vc)
-	
-	log.Info("Finished playing song...")
 	
 	log.Info(len(queues[play.GuildID]))
 
@@ -942,6 +959,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
 	delete(queues, play.GuildID)
 	vc.Disconnect()
+	lastRan := time.Now()
 	return nil
 }
 
