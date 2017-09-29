@@ -898,12 +898,12 @@ func trackSoundStats(play *Play) {
 // Play a sound
 func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 
-	difference = time.Now().Sub(lastRan)
+	difference := time.Now().Sub(lastRan)
 	log.Info(difference)
 	
 	for difference < WAIT {
 		time.Sleep(time.Second * 1)
-		difference = time.Now().Sub(lastRan)
+		difference := time.Now().Sub(lastRan)
 	}
 	
 	log.WithFields(log.Fields{
