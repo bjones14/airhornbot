@@ -898,17 +898,10 @@ func trackSoundStats(play *Play) {
 // Play a sound
 func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 
-	difference := int(time.Now().Sub(lastRan)/time.Second)
-	log.Info(difference)
-	
-	if difference < WAIT {
-		time.Sleep(time.Duration(WAIT - difference) * time.Second)
-	}
-	
 	log.WithFields(log.Fields{
 		"play": play,
 	}).Info("Playing sound")
-	
+
 	if vc == nil {
 		vc, err = discord.ChannelVoiceJoin(play.GuildID, play.ChannelID, false, false)
 		// vc.Receive = false
@@ -935,7 +928,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 
 	// Play the sound
 	play.Sound.Play(vc)
-	
+
 	log.Info(len(queues[play.GuildID]))
 
 	// If this is chained, play the chained sound
@@ -954,7 +947,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
 	delete(queues, play.GuildID)
 	vc.Disconnect()
-	lastRan = time.Now()
+
 	return nil
 }
 
