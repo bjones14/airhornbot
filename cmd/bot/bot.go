@@ -990,7 +990,7 @@ func playSoundREST(playREST *PlayREST, vc *discordgo.VoiceConnection) (err error
 	}).Info("Playing RESTful sound")
 	
 	if vc == nil {
-		vc, err := discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
+		vc, err = discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
 		
 		// vc.Receive = false
 		if err != nil {
