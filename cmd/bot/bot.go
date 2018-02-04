@@ -859,8 +859,8 @@ func createPlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollect
 // Prepares a RESTful play
 func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
 	// Grab the users voice channel
-	channel := 354323134192812045
-	guild := 354323134192812043
+	channel := "354323134192812045"
+	guild := "354323134192812043"
 
 	// Create the play
 	play := &PlayREST{
@@ -891,7 +891,7 @@ func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
 
 // Prepares and enqueues a play into the ratelimit/buffer guild queue
 func enqueuePlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollection, sound *Sound) {
-	play := createPlayREST(user, guild, coll, sound)
+	play := createPlay(user, guild, coll, sound)
 	if play == nil {
 		return
 	}
