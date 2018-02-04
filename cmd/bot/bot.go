@@ -917,16 +917,18 @@ func enqueuePlayREST(coll *SoundCollection, sound *Sound) {
 		return
 	}
 
+	guildID = "354323134192812043"
+	
 	// Check if we already have a connection to this guild
 	//   yes, this isn't threadsafe, but its "OK" 99% of the time
-	_, exists := queuesREST[guild.ID]
+	_, exists := queuesREST[guildID]
 
 	if exists {
-		if len(queuesREST[guild.ID]) < MAX_QUEUE_SIZE {
-			queuesREST[guild.ID] <- playREST
+		if len(queuesREST[guildID]) < MAX_QUEUE_SIZE {
+			queuesREST[guildID] <- playREST
 		}
 	} else {
-		queuesREST[guild.ID] = make(chan *PlayREST, MAX_QUEUE_SIZE)
+		queuesREST[guildID] = make(chan *PlayREST, MAX_QUEUE_SIZE)
 		playSoundREST(playREST, nil)
 	}
 }
@@ -1231,6 +1233,7 @@ func playSoundREST(w http.ResponseWriter, r *http.Request) {
         params := mux.Vars(r)
         log.Info("RESTful request to play sound '" + params["id"] + "'")
 		onMessageCreateREST(params["id"])
+		return
 }
 
 func main() {
