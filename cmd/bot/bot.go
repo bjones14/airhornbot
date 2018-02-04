@@ -19,7 +19,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
 	"github.com/gorilla/mux"
-	redis "gopkg.in/redis.v3"
 )
 
 
@@ -27,11 +26,9 @@ var (
 	// discordgo session
 	discord *discordgo.Session
 
-	// Redis client connection (used for stats)
-	rcli *redis.Client
-
 	// Map of Guild id's to *Play channels, used for queuing and rate-limiting guilds
 	queues map[string]chan *Play = make(map[string]chan *Play)
+	queuesREST map[string]chan *PlayREST = make(map[string]chan *PlayREST)
 
 	// Sound encoding settings
 	BITRATE        = 128
@@ -45,10 +42,9 @@ var (
 	
 	// Time to wait between subsequent joins in seconds.
 	WAIT = 5
-	
 )
 
-// Play represents an individual use of the !airhorn command
+// Play represents an individual use of the !airhorn command from chat
 type Play struct {
 	GuildID   string
 	ChannelID string
@@ -61,6 +57,20 @@ type Play struct {
 	// If true, this was a forced play using a specific airhorn sound name
 	Forced bool
 }
+
+// PlayREST represents an individual use of the !airhorn command from a RESTful call
+type PlayREST struct {
+	GuildID   string
+	ChannelID string
+	Sound     *Sound
+
+	// The next play to occur after this, only used for chaining sounds like anotha
+	Next *PlayREST
+
+	// If true, this was a forced play using a specific airhorn sound name
+	Forced bool
+}
+
 
 type SoundCollection struct {
 	Prefix    string
@@ -846,9 +856,41 @@ func createPlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollect
 	return play
 }
 
+// Prepares a RESTful play
+func createPlayREST(guild *discordgo.Guild, coll *SoundCollection, sound *Sound) *Play {
+	// Grab the users voice channel
+	channel := 354323134192812045
+
+	// Create the play
+	play := &PlayREST{
+		GuildID:   guild.ID,
+		ChannelID: channel.ID,
+		Sound:     sound,
+		Forced:    true,
+	}
+
+	// If we didn't get passed a manual sound, generate a random one
+	if play.Sound == nil {
+		play.Sound = coll.Random()
+		play.Forced = false
+	}
+
+	// If the collection is a chained one, set the next sound
+	if coll.ChainWith != nil {
+		play.Next = &PlayREST{
+			GuildID:   play.GuildID,
+			ChannelID: play.ChannelID,
+			Sound:     coll.ChainWith.Random(),
+			Forced:    play.Forced,
+		}
+	}
+
+	return play
+}
+
 // Prepares and enqueues a play into the ratelimit/buffer guild queue
 func enqueuePlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollection, sound *Sound) {
-	play := createPlay(user, guild, coll, sound)
+	play := createPlayREST(user, guild, coll, sound)
 	if play == nil {
 		return
 	}
@@ -867,37 +909,24 @@ func enqueuePlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollec
 	}
 }
 
-func trackSoundStats(play *Play) {
-	if rcli == nil {
+// Prepares and enqueues a RESTful play into the ratelimit/buffer guild queue
+func enqueuePlayREST(guild *discordgo.Guild, coll *SoundCollection, sound *Sound) {
+	playREST := createPlayREST(guild, coll, sound)
+	if playREST == nil {
 		return
 	}
 
-	_, err := rcli.Pipelined(func(pipe *redis.Pipeline) error {
-		var baseChar string
+	// Check if we already have a connection to this guild
+	//   yes, this isn't threadsafe, but its "OK" 99% of the time
+	_, exists := queuesREST[guild.ID]
 
-		if play.Forced {
-			baseChar = "f"
-		} else {
-			baseChar = "a"
+	if exists {
+		if len(queuesREST[guild.ID]) < MAX_QUEUE_SIZE {
+			queuesREST[guild.ID] <- playREST
 		}
-
-		base := fmt.Sprintf("airhorn:%s", baseChar)
-		pipe.Incr("airhorn:total")
-		pipe.Incr(fmt.Sprintf("%s:total", base))
-		pipe.Incr(fmt.Sprintf("%s:sound:%s", base, play.Sound.Name))
-		pipe.Incr(fmt.Sprintf("%s:user:%s:sound:%s", base, play.UserID, play.Sound.Name))
-		pipe.Incr(fmt.Sprintf("%s:guild:%s:sound:%s", base, play.GuildID, play.Sound.Name))
-		pipe.Incr(fmt.Sprintf("%s:guild:%s:chan:%s:sound:%s", base, play.GuildID, play.ChannelID, play.Sound.Name))
-		pipe.SAdd(fmt.Sprintf("%s:users", base), play.UserID)
-		pipe.SAdd(fmt.Sprintf("%s:guilds", base), play.GuildID)
-		pipe.SAdd(fmt.Sprintf("%s:channels", base), play.ChannelID)
-		return nil
-	})
-
-	if err != nil {
-		log.WithFields(log.Fields{
-			"error": err,
-		}).Warning("Failed to track stats in redis")
+	} else {
+		queuesREST[guild.ID] = make(chan *PlayREST, MAX_QUEUE_SIZE)
+		playSoundREST(playREST, nil)
 	}
 }
 
@@ -927,8 +956,6 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 		time.Sleep(time.Millisecond * 125)
 	}
 	
-	// Track stats for this play in redis
-	// go trackSoundStats(play)
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(time.Millisecond * 32)
 
@@ -952,6 +979,57 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	// If the queue is empty, delete it
 	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
 	delete(queues, play.GuildID)
+	vc.Disconnect()
+	return nil
+}
+
+// Play a RESTful sound
+func playSoundREST(playREST *PlayREST) (err error) {
+	
+	log.WithFields(log.Fields{
+		"playREST": playREST,
+	}).Info("Playing RESTful sound")
+	
+	vc, err = discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
+	
+	// vc.Receive = false
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error": err,
+		}).Error("Failed to play sound")
+		delete(queues, play.GuildID)
+		return err
+	}
+
+	// If we need to change channels, do that now
+	if vc.ChannelID != playREST.ChannelID {
+		vc.ChangeChannel(playREST.ChannelID, false, false)
+		time.Sleep(time.Millisecond * 125)
+	}
+	
+	// Sleep for a specified amount of time before playing the sound
+	time.Sleep(time.Millisecond * 32)
+
+	// Play the sound
+	playREST.Sound.Play(vc)
+	
+	log.Info(len(queuesREST[play.GuildID]))
+
+	// If this is chained, play the chained sound
+	if playREST.Next != nil {
+		playSoundREST(playREST.Next, vc)
+	}
+
+	// If there is another song in the queue, recurse and play that
+	if len(queuesREST[play.GuildID]) > 0 {
+		playREST := <-queuesREST[play.GuildID]
+		playSoundREST(playREST, vc)
+		return nil
+	}
+
+	// If the queue is empty, delete it
+	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
+	delete(queuesREST, playREST.GuildID)
 	vc.Disconnect()
 	return nil
 }
@@ -1001,25 +1079,6 @@ func displayBotStats(cid string) {
 	fmt.Fprintf(w, "```\n")
 	w.Flush()
 	discord.ChannelMessageSend(cid, buf.String())
-}
-
-func utilSumRedisKeys(keys []string) int {
-	results := make([]*redis.StringCmd, 0)
-
-	rcli.Pipelined(func(pipe *redis.Pipeline) error {
-		for _, key := range keys {
-			results = append(results, pipe.Get(key))
-		}
-		return nil
-	})
-
-	var total int
-	for _, i := range results {
-		t, _ := strconv.Atoi(i.Val())
-		total += t
-	}
-
-	return total
 }
 
 func displayUserStats(cid, uid string) {
@@ -1136,10 +1195,44 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
+func onMessageCreateREST(sid string) {
+	if len(sid) <= 0) {
+		return
+	}
+
+	parts := strings.Split(strings.ToLower(sid), " ")
+
+	// Statically set.
+	guild, _ := 354323134192812043
+
+	// Find the collection for the command we got
+	for _, coll := range COLLECTIONS {
+		if scontains(parts[0], coll.Commands...) {
+
+			// If they passed a specific sound effect, find and select that (otherwise play nothing)
+			var sound *Sound
+			if len(parts) > 1 {
+				for _, s := range coll.Sounds {
+					if parts[1] == s.Name {
+						sound = s
+					}
+				}
+
+				if sound == nil {
+					return
+				}
+			}
+
+			go enqueuePlayREST(guild, coll, sound)
+			return
+		}
+	}
+}
+
 func playSoundREST(w http.ResponseWriter, r *http.Request) {
-        // json.NewEncoder(w).Encode(SoundRequest)
         params := mux.Vars(r)
         log.Info("RESTful request to play sound '" + params["id"] + "'")
+		onMessageCreateREST(params["id"])
 }
 
 func main() {
