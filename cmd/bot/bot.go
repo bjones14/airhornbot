@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -923,8 +922,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	}
 
 	// If we need to change channels, do that now
-	if vc.ChannelID != play.ChannelID
-	{
+	if vc.ChannelID != play.ChannelID {
 		vc.ChangeChannel(play.ChannelID, false, false)
 		time.Sleep(time.Millisecond * 125)
 	}
