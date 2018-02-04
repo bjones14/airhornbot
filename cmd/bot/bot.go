@@ -917,7 +917,7 @@ func enqueuePlayREST(coll *SoundCollection, sound *Sound) {
 		return
 	}
 
-	guildID = "354323134192812043"
+	guildID := "354323134192812043"
 	
 	// Check if we already have a connection to this guild
 	//   yes, this isn't threadsafe, but its "OK" 99% of the time
@@ -993,14 +993,14 @@ func playSoundREST(playREST *PlayREST) (err error) {
 		"playREST": playREST,
 	}).Info("Playing RESTful sound")
 	
-	vc, err = discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
+	vc, err := discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
 	
 	// vc.Receive = false
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
 		}).Error("Failed to play sound")
-		delete(queues, play.GuildID)
+		delete(queues, playREST.GuildID)
 		return err
 	}
 
@@ -1024,14 +1024,14 @@ func playSoundREST(playREST *PlayREST) (err error) {
 	}
 
 	// If there is another song in the queue, recurse and play that
-	if len(queuesREST[play.GuildID]) > 0 {
-		playREST := <-queuesREST[play.GuildID]
+	if len(queuesREST[playREST.GuildID]) > 0 {
+		playREST := <-queuesREST[playREST.GuildID]
 		playSoundREST(playREST, vc)
 		return nil
 	}
 
 	// If the queue is empty, delete it
-	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
+	time.Sleep(time.Millisecond * time.Duration(playREST.Sound.PartDelay))
 	delete(queuesREST, playREST.GuildID)
 	vc.Disconnect()
 	return nil
@@ -1229,7 +1229,7 @@ func onMessageCreateREST(sid string) {
 	}
 }
 
-func playSoundREST(w http.ResponseWriter, r *http.Request) {
+func playSoundWeb(w http.ResponseWriter, r *http.Request) {
         params := mux.Vars(r)
         log.Info("RESTful request to play sound '" + params["id"] + "'")
 		onMessageCreateREST(params["id"])
@@ -1287,7 +1287,7 @@ func main() {
 
 	// Launch RESTful API
 	router := mux.NewRouter()
-    router.HandleFunc("/airhorn/{id}", playSoundREST).Methods("GET")
+    router.HandleFunc("/airhorn/{id}", playSoundWeb).Methods("GET")
 	
 	// We're running!
 	log.Info("CLANSPBOT is ready to fuck it up.")
