@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/binary"
 	"flag"
 	"fmt"
@@ -10,14 +9,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"runtime"
 	"strconv"
 	"strings"
-	"text/tabwriter"
 	"time"
 	log "github.com/Sirupsen/logrus"
 	"github.com/bwmarrin/discordgo"
-	"github.com/dustin/go-humanize"
 	"github.com/gorilla/mux"
 )
 
@@ -1044,6 +1040,15 @@ func onReady(s *discordgo.Session, event *discordgo.Ready) {
 	s.UpdateStatus(0, "AoEII")
 }
 
+func scontains(key string, options ...string) bool {
+	for _, item := range options {
+		if item == key {
+			return true
+		}
+	}
+	return false
+}
+
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if len(m.Content) <= 0 || (m.Content[0] != '!' && len(m.Mentions) < 1) {
 		return
@@ -1068,22 +1073,6 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			"channel": channel,
 			"message": m.ID,
 		}).Warning("Failed to grab guild")
-		return
-	}
-
-	// If this is a mention, it should come from the owner (otherwise we don't care)
-	if len(m.Mentions) > 0 && m.Author.ID == OWNER && len(parts) > 0 {
-		mentioned := false
-		for _, mention := range m.Mentions {
-			mentioned = (mention.ID == s.State.Ready.User.ID)
-			if mentioned {
-				break
-			}
-		}
-
-		if mentioned {
-			handleBotControlMessages(s, m, parts, guild)
-		}
 		return
 	}
 
