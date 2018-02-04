@@ -987,21 +987,23 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 }
 
 // Play a RESTful sound
-func playSoundREST(playREST *PlayREST) (err error) {
+func playSoundREST(playREST *PlayREST, vc *discordgo.VoiceConnection) (err error) {
 	
 	log.WithFields(log.Fields{
 		"playREST": playREST,
 	}).Info("Playing RESTful sound")
 	
-	vc, err := discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
-	
-	// vc.Receive = false
-	if err != nil {
-		log.WithFields(log.Fields{
-			"error": err,
-		}).Error("Failed to play sound")
-		delete(queues, playREST.GuildID)
-		return err
+	if vc == nil {
+		vc, err := discord.ChannelVoiceJoin(playREST.GuildID, playREST.ChannelID, false, false)
+		
+		// vc.Receive = false
+		if err != nil {
+			log.WithFields(log.Fields{
+				"error": err,
+			}).Error("Failed to play sound")
+			delete(queues, playREST.GuildID)
+			return err
+		}
 	}
 
 	// If we need to change channels, do that now
@@ -1016,7 +1018,7 @@ func playSoundREST(playREST *PlayREST) (err error) {
 	// Play the sound
 	playREST.Sound.Play(vc)
 	
-	log.Info(len(queuesREST[play.GuildID]))
+	log.Info(len(queuesREST[playREST.GuildID]))
 
 	// If this is chained, play the chained sound
 	if playREST.Next != nil {
@@ -1040,95 +1042,6 @@ func playSoundREST(playREST *PlayREST) (err error) {
 func onReady(s *discordgo.Session, event *discordgo.Ready) {
 	log.Info("Received READY payload")
 	s.UpdateStatus(0, "AoEII")
-}
-
-func scontains(key string, options ...string) bool {
-	for _, item := range options {
-		if item == key {
-			return true
-		}
-	}
-	return false
-}
-
-func calculateAirhornsPerSecond(cid string) {
-	current, _ := strconv.Atoi(rcli.Get("airhorn:a:total").Val())
-	time.Sleep(time.Second * 10)
-	latest, _ := strconv.Atoi(rcli.Get("airhorn:a:total").Val())
-
-	discord.ChannelMessageSend(cid, fmt.Sprintf("Current APS: %v", (float64(latest-current))/10.0))
-}
-
-func displayBotStats(cid string) {
-	stats := runtime.MemStats{}
-	runtime.ReadMemStats(&stats)
-
-	users := 0
-	for _, guild := range discord.State.Ready.Guilds {
-		users += len(guild.Members)
-	}
-
-	w := &tabwriter.Writer{}
-	buf := &bytes.Buffer{}
-
-	w.Init(buf, 0, 4, 0, ' ', 0)
-	fmt.Fprintf(w, "```\n")
-	fmt.Fprintf(w, "Discordgo: \t%s\n", discordgo.VERSION)
-	fmt.Fprintf(w, "Go: \t%s\n", runtime.Version())
-	fmt.Fprintf(w, "Memory: \t%s / %s (%s total allocated)\n", humanize.Bytes(stats.Alloc), humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc))
-	fmt.Fprintf(w, "Tasks: \t%d\n", runtime.NumGoroutine())
-	fmt.Fprintf(w, "Servers: \t%d\n", len(discord.State.Ready.Guilds))
-	fmt.Fprintf(w, "Users: \t%d\n", users)
-	fmt.Fprintf(w, "```\n")
-	w.Flush()
-	discord.ChannelMessageSend(cid, buf.String())
-}
-
-func displayUserStats(cid, uid string) {
-	keys, err := rcli.Keys(fmt.Sprintf("airhorn:*:user:%s:sound:*", uid)).Result()
-	if err != nil {
-		return
-	}
-
-	totalAirhorns := utilSumRedisKeys(keys)
-	discord.ChannelMessageSend(cid, fmt.Sprintf("Total Airhorns: %v", totalAirhorns))
-}
-
-func displayServerStats(cid, sid string) {
-	keys, err := rcli.Keys(fmt.Sprintf("airhorn:*:guild:%s:sound:*", sid)).Result()
-	if err != nil {
-		return
-	}
-
-	totalAirhorns := utilSumRedisKeys(keys)
-	discord.ChannelMessageSend(cid, fmt.Sprintf("Total Airhorns: %v", totalAirhorns))
-}
-
-func utilGetMentioned(s *discordgo.Session, m *discordgo.MessageCreate) *discordgo.User {
-	for _, mention := range m.Mentions {
-		if mention.ID != s.State.Ready.User.ID {
-			return mention
-		}
-	}
-	return nil
-}
-
-// Handles bot operator messages, should be refactored (lmao)
-func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, parts []string, g *discordgo.Guild) {
-	if scontains(parts[1], "status") {
-		displayBotStats(m.ChannelID)
-	} else if scontains(parts[1], "stats") {
-		if len(m.Mentions) >= 2 {
-			displayUserStats(m.ChannelID, utilGetMentioned(s, m).ID)
-		} else if len(parts) >= 3 {
-			displayUserStats(m.ChannelID, parts[2])
-		} else {
-			displayServerStats(m.ChannelID, g.ID)
-		}
-	} else if scontains(parts[1], "aps") {
-		s.ChannelMessageSend(m.ChannelID, ":ok_hand: give me a sec m8")
-		go calculateAirhornsPerSecond(m.ChannelID)
-	}
 }
 
 func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
