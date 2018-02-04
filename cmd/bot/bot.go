@@ -1196,7 +1196,7 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func onMessageCreateREST(sid string) {
-	if len(sid) <= 0) {
+	if len((sid) <= 0) {
 		return
 	}
 
