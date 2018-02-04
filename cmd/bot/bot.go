@@ -3,10 +3,12 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
 	"math/rand"
+	"net/http"
 	"os"
 	"os/signal"
 	"runtime"
@@ -14,12 +16,13 @@ import (
 	"strings"
 	"text/tabwriter"
 	"time"
-
 	log "github.com/Sirupsen/logrus"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
+	"github.com/gorilla/mux"
 	redis "gopkg.in/redis.v3"
 )
+
 
 var (
 	// discordgo session
@@ -810,6 +813,10 @@ func createPlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollect
 		}).Warning("Failed to find channel to play sound in")
 		return nil
 	}
+	
+	// Debug - find out what the General channel is.
+	log.Info("Channel ID is: " + channel.ID)
+	log.Info("Guild ID is: " + guild.ID)
 
 	// Create the play
 	play := &Play{
@@ -897,13 +904,6 @@ func trackSoundStats(play *Play) {
 
 // Play a sound
 func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
-
-	difference := int(time.Now().Sub(lastRan)/time.Second)
-	log.Info(difference)
-	
-	if difference < WAIT {
-		time.Sleep(time.Duration(WAIT - difference) * time.Second)
-	}
 	
 	log.WithFields(log.Fields{
 		"play": play,
@@ -911,6 +911,7 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	
 	if vc == nil {
 		vc, err = discord.ChannelVoiceJoin(play.GuildID, play.ChannelID, false, false)
+		log.Info("GuildID: " + play.GuildID + " -- ChannelID: " + play.ChannelID)
 		// vc.Receive = false
 		if err != nil {
 			log.WithFields(log.Fields{
@@ -922,14 +923,14 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	}
 
 	// If we need to change channels, do that now
-	if vc.ChannelID != play.ChannelID {
+	if vc.ChannelID != play.ChannelID
+	{
 		vc.ChangeChannel(play.ChannelID, false, false)
 		time.Sleep(time.Millisecond * 125)
 	}
-
+	
 	// Track stats for this play in redis
 	// go trackSoundStats(play)
-
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(time.Millisecond * 32)
 
@@ -954,7 +955,6 @@ func playSound(play *Play, vc *discordgo.VoiceConnection) (err error) {
 	time.Sleep(time.Millisecond * time.Duration(play.Sound.PartDelay))
 	delete(queues, play.GuildID)
 	vc.Disconnect()
-	lastRan = time.Now()
 	return nil
 }
 
@@ -1138,10 +1138,15 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
+func playSoundREST(w http.ResponseWriter, r *http.Request) {
+        // json.NewEncoder(w).Encode(SoundRequest)
+        params := mux.Vars(r)
+        log.Info("RESTful request to play sound '" + params["id"] + "'")
+}
+
 func main() {
 	var (
 		Token      = flag.String("t", "", "Discord Authentication Token")
-		Redis      = flag.String("r", "", "Redis Connection String")
 		Shard      = flag.String("s", "", "Shard ID")
 		ShardCount = flag.String("c", "", "Number of shards")
 		Owner      = flag.String("o", "", "Owner ID")
@@ -1157,20 +1162,6 @@ func main() {
 	log.Info("Preloading sounds...")
 	for _, coll := range COLLECTIONS {
 		coll.Load()
-	}
-
-	// If we got passed a redis server, try to connect
-	if *Redis != "" {
-		log.Info("Connecting to redis...")
-		rcli = redis.NewClient(&redis.Options{Addr: *Redis, DB: 0})
-		_, err = rcli.Ping().Result()
-
-		if err != nil {
-			log.WithFields(log.Fields{
-				"error": err,
-			}).Fatal("Failed to connect to redis")
-			return
-		}
 	}
 
 	// Create a discord session
@@ -1202,9 +1193,16 @@ func main() {
 		return
 	}
 
+	// Launch RESTful API
+	router := mux.NewRouter()
+    router.HandleFunc("/airhorn/{id}", playSoundREST).Methods("GET")
+	
 	// We're running!
-	log.Info("CLANSPBOT is ready to horn it up.")
-
+	log.Info("CLANSPBOT is ready to fuck it up.")
+	
+	// Launch synchronous HTTP service.
+    log.Fatal(http.ListenAndServe(":8000", router))
+	
 	// Wait for a signal to quit
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
