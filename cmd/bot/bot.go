@@ -886,7 +886,7 @@ func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
 		}
 	}
 
-	return play
+	return playREST
 }
 
 // Prepares and enqueues a play into the ratelimit/buffer guild queue
