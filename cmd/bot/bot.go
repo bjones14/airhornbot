@@ -857,14 +857,15 @@ func createPlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollect
 }
 
 // Prepares a RESTful play
-func createPlayREST(guild *discordgo.Guild, coll *SoundCollection, sound *Sound) *Play {
+func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
 	// Grab the users voice channel
 	channel := 354323134192812045
+	guild := 354323134192812043
 
 	// Create the play
 	play := &PlayREST{
-		GuildID:   guild.ID,
-		ChannelID: channel.ID,
+		GuildID:   guild,
+		ChannelID: channel,
 		Sound:     sound,
 		Forced:    true,
 	}
@@ -910,8 +911,8 @@ func enqueuePlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollec
 }
 
 // Prepares and enqueues a RESTful play into the ratelimit/buffer guild queue
-func enqueuePlayREST(guild *discordgo.Guild, coll *SoundCollection, sound *Sound) {
-	playREST := createPlayREST(guild, coll, sound)
+func enqueuePlayREST(coll *SoundCollection, sound *Sound) {
+	playREST := createPlayREST(coll, sound)
 	if playREST == nil {
 		return
 	}
@@ -1202,9 +1203,6 @@ func onMessageCreateREST(sid string) {
 
 	parts := strings.Split(strings.ToLower(sid), " ")
 
-	// Statically set.
-	guild, _ := 354323134192812043
-
 	// Find the collection for the command we got
 	for _, coll := range COLLECTIONS {
 		if scontains(parts[0], coll.Commands...) {
@@ -1223,7 +1221,7 @@ func onMessageCreateREST(sid string) {
 				}
 			}
 
-			go enqueuePlayREST(guild, coll, sound)
+			go enqueuePlayREST(coll, sound)
 			return
 		}
 	}
