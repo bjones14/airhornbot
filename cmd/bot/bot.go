@@ -857,13 +857,13 @@ func createPlay(user *discordgo.User, guild *discordgo.Guild, coll *SoundCollect
 }
 
 // Prepares a RESTful play
-func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
+func createPlayREST(coll *SoundCollection, sound *Sound) *PlayREST {
 	// Grab the users voice channel
 	channel := "354323134192812045"
 	guild := "354323134192812043"
 
 	// Create the play
-	play := &PlayREST{
+	playREST := &PlayREST{
 		GuildID:   guild,
 		ChannelID: channel,
 		Sound:     sound,
@@ -871,18 +871,18 @@ func createPlayREST(coll *SoundCollection, sound *Sound) *Play {
 	}
 
 	// If we didn't get passed a manual sound, generate a random one
-	if play.Sound == nil {
-		play.Sound = coll.Random()
-		play.Forced = false
+	if playREST.Sound == nil {
+		playREST.Sound = coll.Random()
+		playREST.Forced = false
 	}
 
 	// If the collection is a chained one, set the next sound
 	if coll.ChainWith != nil {
-		play.Next = &PlayREST{
-			GuildID:   play.GuildID,
-			ChannelID: play.ChannelID,
+		playREST.Next = &PlayREST{
+			GuildID:   playREST.GuildID,
+			ChannelID: playREST.ChannelID,
 			Sound:     coll.ChainWith.Random(),
-			Forced:    play.Forced,
+			Forced:    playREST.Forced,
 		}
 	}
 
