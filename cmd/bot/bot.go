@@ -647,6 +647,16 @@ var AOE42 *SoundCollection = &SoundCollection{
 	},
 }
 
+var WAHWAH *SoundCollection = &SoundCollection{
+	Prefix: "queeblo",
+	Commands: []string{
+		"!wahwah",
+	},
+	Sounds: []*Sound{
+		createSound("wahwah", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -699,6 +709,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE40,
 	AOE41,
 	AOE42,
+        WAHWAH
 }
 
 // Create a Sound struct
