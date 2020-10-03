@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-        "github.com/Sirupsen/logrus"
+        log "github.com/Sirupsen/logrus"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorilla/mux"
 )
