@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	log "github.com/Sirupsen/logrus"
+        "github.com/Sirupsen/logrus"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorilla/mux"
 )
@@ -32,7 +32,7 @@ var (
 
 	// Owner
 	OWNER string
-	
+
 	// Used to delay subsequent voice chat joins.
 	lastRan = time.Now()
 	
@@ -709,7 +709,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE40,
 	AOE41,
 	AOE42,
-        WAHWAH
+        WAHWAH,
 }
 
 // Create a Sound struct
