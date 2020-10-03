@@ -667,6 +667,16 @@ var WHOPPER *SoundCollection = &SoundCollection{
 	},
 }
 
+var KYSONCE *SoundCollection = &SoundCollection{
+	Prefix: "neely",
+	Commands: []string{
+		"!kysonce",
+	},
+	Sounds: []*Sound{
+		createSound("kysonce", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -721,6 +731,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE42,
         WAHWAH,
         WHOPPER,
+        KYSONCE,
 }
 
 // Create a Sound struct
