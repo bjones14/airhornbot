@@ -677,6 +677,36 @@ var KYSONCE *SoundCollection = &SoundCollection{
 	},
 }
 
+var BIGDOINKS *SoundCollection = &SoundCollection{
+	Prefix: "doink",
+	Commands: []string{
+		"!bigdoinks",
+	},
+	Sounds: []*Sound{
+		createSound("bigdoinks", 50, 250),
+	},
+}
+
+var AMISH *SoundCollection = &SoundCollection{
+	Prefix: "doink",
+	Commands: []string{
+		"!amish",
+	},
+	Sounds: []*Sound{
+		createSound("amish", 50, 250),
+	},
+}
+
+var GANG *SoundCollection = &SoundCollection{
+	Prefix: "doink",
+	Commands: []string{
+		"!gang",
+	},
+	Sounds: []*Sound{
+		createSound("gang", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -732,6 +762,9 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
         WAHWAH,
         WHOPPER,
         KYSONCE,
+        BIGDOINKS,
+        AMISH,
+        GANG,
 }
 
 // Create a Sound struct
