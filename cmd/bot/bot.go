@@ -707,6 +707,16 @@ var GANG *SoundCollection = &SoundCollection{
 	},
 }
 
+var CHILIS *SoundCollection = &SoundCollection{
+	Prefix: "chilis",
+	Commands: []string{
+		"!chilis",
+	},
+	Sounds: []*Sound{
+		createSound("welcome", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -765,6 +775,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
         BIGDOINKS,
         AMISH,
         GANG,
+	CHILIS
 }
 
 // Create a Sound struct
