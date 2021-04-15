@@ -752,10 +752,8 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
         WAHWAH,
         WHOPPER,
         KYSONCE,
-        BIGDOINKS,
         AMISH,
-        GANG,
-	CHILIS
+	CHILIS,
 }
 
 // Create a Sound struct
