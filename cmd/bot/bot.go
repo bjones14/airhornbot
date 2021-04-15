@@ -677,16 +677,6 @@ var KYSONCE *SoundCollection = &SoundCollection{
 	},
 }
 
-var BIGDOINKS *SoundCollection = &SoundCollection{
-	Prefix: "doink",
-	Commands: []string{
-		"!bigdoinks",
-	},
-	Sounds: []*Sound{
-		createSound("bigdoinks", 50, 250),
-	},
-}
-
 var AMISH *SoundCollection = &SoundCollection{
 	Prefix: "doink",
 	Commands: []string{
@@ -694,16 +684,6 @@ var AMISH *SoundCollection = &SoundCollection{
 	},
 	Sounds: []*Sound{
 		createSound("amish", 50, 250),
-	},
-}
-
-var GANG *SoundCollection = &SoundCollection{
-	Prefix: "doink",
-	Commands: []string{
-		"!gang",
-	},
-	Sounds: []*Sound{
-		createSound("gang", 50, 250),
 	},
 }
 
