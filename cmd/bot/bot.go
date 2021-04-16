@@ -708,7 +708,7 @@ var TANYA *SoundCollection = &SoundCollection{
 }
 
 var STARTUP *SoundCollection = &SoundCollection{
-	Prefix: "xp",
+	Prefix: "winxp",
 	Commands: []string{
 		"!startup",
 	},
@@ -718,7 +718,7 @@ var STARTUP *SoundCollection = &SoundCollection{
 }
 
 var SHUTDOWN *SoundCollection = &SoundCollection{
-	Prefix: "xp",
+	Prefix: "winxp",
 	Commands: []string{
 		"!shutdown",
 	},
