@@ -753,7 +753,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
         WHOPPER,
         KYSONCE,
         AMISH,
-	CHILIS
+	CHILIS,
 }
 
 // Create a Sound struct
@@ -1092,7 +1092,7 @@ func playSoundREST(playREST *PlayREST, vc *discordgo.VoiceConnection) (err error
 
 func onReady(s *discordgo.Session, event *discordgo.Ready) {
 	log.Info("Received READY payload")
-	s.UpdateStatus(0, "AoEII")
+	s.UpdateGameStatus(0, "AoEII")
 }
 
 func scontains(key string, options ...string) bool {
