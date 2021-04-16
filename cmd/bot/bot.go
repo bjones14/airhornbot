@@ -1,4 +1,4 @@
-package main
+ package main
 
 import (
 	"encoding/binary"
@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-        log "github.com/Sirupsen/logrus"
+    log "github.com/Sirupsen/logrus"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorilla/mux"
 )
@@ -697,6 +697,56 @@ var CHILIS *SoundCollection = &SoundCollection{
 	},
 }
 
+var TANYA *SoundCollection = &SoundCollection{
+	Prefix: "ra2",
+	Commands: []string{
+		"!tanya",
+	},
+	Sounds: []*Sound{
+		createSound("tanya", 50, 250),
+	},
+}
+
+var STARTUP *SoundCollection = &SoundCollection{
+	Prefix: "xp",
+	Commands: []string{
+		"!startup",
+	},
+	Sounds: []*Sound{
+		createSound("startup", 50, 250),
+	},
+}
+
+var SHUTDOWN *SoundCollection = &SoundCollection{
+	Prefix: "xp",
+	Commands: []string{
+		"!shutdown",
+	},
+	Sounds: []*Sound{
+		createSound("shutdown", 50, 250),
+	},
+}
+
+var WILHELM *SoundCollection = &SoundCollection{
+	Prefix: "wilhelm",
+	Commands: []string{
+		"!scream",
+	},
+	Sounds: []*Sound{
+		createSound("scream", 50, 250),
+	},
+}
+
+var FUSRODAH *SoundCollection = &SoundCollection{
+	Prefix: "elder",
+	Commands: []string{
+		"!fusrodah",
+	},
+	Sounds: []*Sound{
+		createSound("fusrodah", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -749,11 +799,18 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AOE40,
 	AOE41,
 	AOE42,
-        WAHWAH,
-        WHOPPER,
-        KYSONCE,
-        AMISH,
+    WAHWAH,
+    WHOPPER,
+    KYSONCE,
+    BIGDOINKS,
+    AMISH,
+    GANG,
 	CHILIS,
+	TANYA,
+	STARTUP,
+	SHUTDOWN,
+	WILHELM,
+	FUSRODAH
 }
 
 // Create a Sound struct
