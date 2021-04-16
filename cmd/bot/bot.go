@@ -810,7 +810,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	STARTUP,
 	SHUTDOWN,
 	WILHELM,
-	FUSRODAH
+	FUSRODAH,
 }
 
 // Create a Sound struct
