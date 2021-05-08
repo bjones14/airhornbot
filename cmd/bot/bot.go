@@ -809,6 +809,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	SHUTDOWN,
 	WILHELM,
 	FUSRODAH,
+	CAKEFARTS,
 }
 
 // Create a Sound struct
