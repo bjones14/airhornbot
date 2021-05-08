@@ -1,4 +1,4 @@
- package main
+package main
 
 import (
 	"encoding/binary"
@@ -747,6 +747,16 @@ var FUSRODAH *SoundCollection = &SoundCollection{
 	},
 }
 
+var CAKEFARTS *SoundCollection = &SoundCollection{
+	Prefix: "cake",
+	Commands: []string{
+		"!cakefarts",
+	},
+	Sounds: []*Sound{
+		createSound("farts", 50, 250),
+	},
+}
+
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	AIRHORN,
 	KHALED,
@@ -809,6 +819,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	SHUTDOWN,
 	WILHELM,
 	FUSRODAH,
+	CAKEFARTS,
 }
 
 // Create a Sound struct
